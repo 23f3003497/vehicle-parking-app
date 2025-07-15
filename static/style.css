@@ -40,3 +40,16 @@ h1{
     margin-top: 50px;
     width:350px;
 }
+#new-pkl-form-body{
+    height:625px;
+    width:400px;
+    margin-top: 50px;
+}
+
+#new-pkl-header{
+    background-color: green;
+    margin-bottom: 10px;
+}
+.pkl-form-btns{
+    width:100%;
+}
