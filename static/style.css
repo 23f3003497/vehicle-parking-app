@@ -1,0 +1,42 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    
+}
+html, body{
+    height: 100%;
+    width: 100%;
+}
+h1{
+    text-align: center;
+}
+#main{
+    border: 2px solid black;
+    margin-top: 10px;
+}
+#canvas{
+    border: 2px solid black;
+    width:60%;
+    margin:auto;
+    height:100vh;
+}
+.form-body{
+    border:2px solid black;
+    margin:auto;
+    padding:10px;
+    border-radius: 10px;
+}
+#login-form-body{
+    height:400px;
+    margin-top:200px;
+    width:350px;
+}
+#login-form-body h1{
+    margin-bottom: 10px;
+}
+#register-form-body{
+    height:625px;
+    margin-top: 50px;
+    width:350px;
+}
