@@ -1,0 +1,9 @@
+#create database
+python
+>>> from app import *
+>>> db.create_all()
+
+#add user entries
+>>> user1=User(email="admin@mail.com", password="xyz", type="admin")
+>>> db.session.add(user1)
+>>> db.session.commit()

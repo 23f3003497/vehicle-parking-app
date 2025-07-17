@@ -1,0 +1,29 @@
+from .database import db
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(), nullable=False)
+    email = db.Column(db.String(), unique=True, nullable=False)
+    password = db.Column(db.String(), nullable=False)
+    type = db.Column(db.String(), default='general')
+
+class ParkingLot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    prime_location_name = db.Column(db.String(), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    address = db.Column(db.String(), nullable=False)
+    pincode = db.Column(db.Integer, nullable=False)
+    max_spots = db.Column(db.Integer, nullable=False)
+
+class ParkingSpot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    lot_id = db.Column(db.Integer, db.ForeignKey(ParkingLot.id), nullable=False)
+    status = db.Column(db.String(), default="Available", nullable=False)
+
+class Reserve(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    spot_id = db.Column(db.Integer, db.ForeignKey(ParkingSpot.id), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    parking_timestamp = db.Column(db.DateTime, nullable=False)
+    leaving_timestamp = db.Column(db.DateTime, nullable=True)
+    parking_cost = db.Column(db.Integer, nullable=True)
