@@ -12,31 +12,31 @@
         <div id="canvas">
             <div class="form-body" id="new-pkl-form-body">
                <h1 id="new-pkl-header">New Parking Lot</h1>
-               <form action="" method="post">
+               <form action="/create-pklot" method="post">
                     <div class="mb-3">
                         <label for="location" class="form-label">Prime Location Name</label>
-                        <input type="text" class="form-control" id="location">
+                        <input type="text" class="form-control" id="location" name="location">
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" rows="3"></textarea>
+                        <textarea class="form-control" id="address" rows="3" name="address"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="pin" class="form-label">Pincode</label>
-                        <input type="text" class="form-control" id="pin">
+                        <input type="text" class="form-control" id="pin" name="pin">
                     </div>
                     <div class="mb-3">
                         <label for="price" class="form-label">Price/hour(in Rs.)</label>
-                        <input type="number" step="0.50" min=0.0 class="form-control" id="price">
+                        <input type="number" step="0.50" min=0.0 class="form-control" id="price" name="price">
                     </div>
                     <div class="mb-3">
                         <label for="max-spots" class="form-label">Maximum Spots</label>
-                        <input type="number" min=1 class="form-control" id="max-spots">
+                        <input type="number" min=1 class="form-control" id="max-spots" name="max-spots">
                     </div>
                     <br>
                     <div class="btn-group pkl-form-btns" role="group">
-                        <input type="submit" class="btn btn-secondary" value="CANCEL">
-                        <input type="submit" class="btn btn-success" value="ADD">
+                        <input type="submit" class="btn btn-secondary" name="action" value="CANCEL">
+                        <input type="submit" class="btn btn-success" name="action" value="ADD">
                     </div>
 
                 

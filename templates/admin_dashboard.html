@@ -3,11 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>User Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <p>Hello Admin {{user.username}}</p>
-    <a href="/login">Logout</a>
+    <div id="main">
+        <div id="canvas">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Welcome Admin {{user.username}}</a>
+                   
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/display_users">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user-summary">Search</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user-summary">Summary</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">Log Out</a>
+                            </li>
+                            
+                        </ul>
+                        
+                        
+                    </div>
+                </div>
+            </nav>
+            <div id="content">
+                <h3 class="headings">Parking Lots</h3>
+                <div id="pkl-lot-display-grid">
+
+                </div>
+                <hr>
+                <div class="btn btn-success">
+                <a href="/create-pklot" style="color:white; text-decoration:none;">Create Parking Lot</a>
+                </div>
+            </div>
+                                
+        
+        </div>
+    </div>
 </body>
 </html>

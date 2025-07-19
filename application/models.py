@@ -1,5 +1,6 @@
 from .database import db
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(), nullable=False, unique=True)
@@ -26,6 +27,7 @@ class Reserve(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     spot_id = db.Column(db.Integer, db.ForeignKey(ParkingSpot.id), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    vehicle_number = db.Column(db.String(), nullable=False)
     parking_timestamp = db.Column(db.DateTime, nullable=False)
     leaving_timestamp = db.Column(db.DateTime, nullable=True)
     parking_cost = db.Column(db.Integer, nullable=True)

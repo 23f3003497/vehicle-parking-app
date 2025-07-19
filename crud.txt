@@ -5,6 +5,9 @@ python
 #create database
 >>> db.create_all() #only once
 
+#add admin
+user1=User(username="admin123", email="admin@parking.app.com", password="adminpass", type="admin")
+
 #add user entries
 >>> user1=User(email="admin@mail.com", password="xyz", type="admin")
 >>> db.session.add(user1)
