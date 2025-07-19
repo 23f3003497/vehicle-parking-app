@@ -1,9 +1,79 @@
-#create database
+using powershell cli move to vehicle-parking-app directory.
+
 python
 >>> from app import *
->>> db.create_all()
+#create database
+>>> db.create_all() #only once
 
 #add user entries
 >>> user1=User(email="admin@mail.com", password="xyz", type="admin")
 >>> db.session.add(user1)
 >>> db.session.commit()
+
+>>> user1=User(username="Anita Das", email="anita@gmail.com", password="anita123")
+>>> db.session.add(user1)
+>>> db.session.commit()
+>>> user1=User(username="Payal Ghosh", email="payalghosh@gmail.com", password="taetae")
+>>> db.session.add(user1)
+>>> db.session.commit()
+
+#updating user entries:
+>>> user2 = User.query.filter_by(username="Anita Das").first()
+>>> user2
+<User 2>
+>>> user2.username = "Saniya Konar"
+>>> db.session.commit() #changes reflected in database
+>>> user2.email = "sansan@user.com"
+>>> db.session.commit() #changes reflected in database
+
+>>> user=User.query.filter_by(username="Pay").first() #doesn't work without exact username
+>>> user #doesn't store anything
+>>> user=User.query.filter_by(username="Payal").first() #same case as above
+>>> user
+
+>>> user=User.query.filter_by(username="Payal Ghosh").first()
+>>> user
+<User 3>
+>>> user.password="payal123"
+>>> db.session.commit()
+
+>>> user=User.query.filter_by(username="Payal Ghosh") #without .first() it doesn't work
+>>> user
+<flask_sqlalchemy.query.Query object at 0x000001F0BE2B4990>
+>>> user.username="Kim Payal"
+>>> db.session.commit() #doesn't work, no changes in database
+
+>>> user=User.query.filter_by(username="Payal Ghosh").first()
+>>> user
+<User 3>
+>>> user.username="Kim Payal"
+>>> db.session.commit()
+>>> user.username="Payal Ghosh"
+>>> db.session.commit()
+
+#deleting user entries
+>>> u1 = User.query.get(3) #get takes only id as its argument
+<stdin>:1: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+>>> db.session.delete(u1)
+>>> db.session.commit() #deletion reflected in database
+
+>>> u2=User.query.filter_by(username="Saniya Konar").first()
+>>> db.session.delete(u2)
+>>> db.session.commit() #deletion reflected in database
+
+
+>>> for user in User.query.all():
+...     print("username: ", user.username, "role: ", user.type)
+... 
+username:  admin1 role:  admin
+username:  Prayas Pandey role:  general
+username:  Raveena Shukla role:  general
+
+users=User.query.all()
+>>> users
+[<User 1>, <User 2>, <User 3>]
+>>> users[0]
+<User 1>
+
+user1=User(username="admin1", email="admin@carparking.com", password="adminpass", type="admin")
+user1=User(username="Sukriti", email="sukriti@gmail.com", password="sukriti123", address="10, Jessore Road, Park Avenue, Mumbai", pincode="713323")

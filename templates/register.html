@@ -12,30 +12,31 @@
         <div id="canvas">
             <div class="form-body" id="register-form-body">
                <h1>Register</h1>
-               <form action="" method="post">
+               <form action="/register" method="post">
                     <div class="mb-3">
-                        <label for="username" class="form-label">Email ID</label>
-                        <input type="text" class="form-control" id="username">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email ID</label>
+                        <input type="text" class="form-control" id="email" name="email">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password">
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="name">
-                    </div>
+                    
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" rows="3"></textarea>
+                        <textarea class="form-control" id="address" rows="3" name="address"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="pin" class="form-label">Pincode</label>
-                        <input type="text" class="form-control" id="pin">
+                        <input type="text" class="form-control" id="pin" name="pincode">
                     </div>
                     <div class="text-center">
                         <input type="submit" class="btn btn-primary" value="Register"><br>
-                        Already an user?<a href="login.html">Login</a>
+                        Already an user?<a href="/login">Login</a>
                     </div>
                 </form>
             </div>
