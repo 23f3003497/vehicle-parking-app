@@ -34,7 +34,7 @@
                         <tr>
                         <th scope="col">Lot ID</th>
                         <th scope="col">Parking Lot Address</th>
-                        <th scope="col">Max Spots</th>
+                        <th scope="col">Available Spots</th>
                         <th scope="col" class="d-flex justify-content-center">Action</th>
                         </tr>
                     </thead>
@@ -43,7 +43,7 @@
                         <tr>
                             <th scope="row">{{lot.id}}</th>
                             <td>{{lot.address}}</td>
-                            <td>{{lot.max_spots}}</td>
+                            <td>{{lot.max_spots-lot.occ_spots}}</td>
                             
                             <td class="d-flex justify-content-center">
                                 <a href="{{ url_for('book_parkingspot', lot_id=lot.id, user_id=user.id) }}" class="btn btn-info">BOOK</a>

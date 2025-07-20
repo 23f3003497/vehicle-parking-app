@@ -41,30 +41,23 @@
                 <table class="table">
                     <thead>
                         <tr>
-                        <th scope="col">Spot ID</th>
+                        <th scope="col">Reservation ID</th>
                         <th scope="col">Parking Lot Location</th>
                         <th scope="col">Vehicle Number</th>
+                        <th scope="col">Booked At</th>
                         <th scope="col" class="d-flex justify-content-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for (res_id,lot_loc,vehicle_no,timestamp,action) in res_list %}
                         <tr>
-                        <th scope="row">1</th>
-                        <td>Bridgerton Road</td>
-                        <td>QW 12 34 5876</td>
-                        <td class="d-flex justify-content-center">
-                            <a class="btn btn-success" href="#">Parked Out
-                        </td>
+                        <th scope="row">{{res_id}}</th>
+                        <td>{{lot_loc}}</td>
+                        <td>{{vehicle_no}}</td>
+                        <td>{{timestamp}}</td>
+                        <td id="action-btn" class="btn btn-info"><a href="#">{{action}}</a></td>
                         </tr>
-                        <tr>
-                        <th scope="row">2</th>
-                        <td>Park Avenue</td>
-                        <td>QW 12 34 5876</td>
-                        <td class="d-flex justify-content-center">
-                            <a class="btn btn-danger" href="/release-parking-space">Release
-                        </td>
-                        </tr>
-                        
+                        {% endfor %}                        
                     </tbody>
                 </table>
                 <h3 class="headings">Search Parking Lots by Location:</h3>

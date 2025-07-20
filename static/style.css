@@ -80,4 +80,63 @@ h1{
 .occ-spot-btn{
     width:100%;
 }
+.pkspot{
+    /*height:50px;
+    width:50px; */
+    background-color: lightgreen;
+    display:flex;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    /* margin: 5px; */
+}
+.pklot{
+    display:grid;
+    border: 2px solid lightgreen;
+    background-color: black;
+    grid-template-columns: repeat(4,minmax(50px, 1fr));
+    grid-column-gap: 10px;
+    grid-row-gap: 7px;
+    padding:5px;
+    justify-content: space-evenly;
+    
+}
+#pkl-lot-display-grid{
+    display:grid;
+    margin:5px;
+    grid-template-rows: 1fr 4fr;
+}
+#pkl-lot-scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+#pklot-heading{
+    background-color: aliceblue;
+    color:rgb(255, 0, 183);
+    padding:5px;
+    display:inline;
+    
+}
+#pklot-heading h3{
+    display:inline;
+    
+}
+#pklot-heading p{
+    height:10px;
+}
+#pk-lots-display{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+}
+.headings{
+    margin-top:10px;
+    text-align: center;
+}
+#action-btn{
+    background-color: aquamarine;
+    margin:5px;
+}
+#action-btn a{
+    text-decoration: none;
+}
  
