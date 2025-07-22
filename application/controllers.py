@@ -158,6 +158,25 @@ def edit_pklot(lot_id):
             pklot.price = request.form.get("price")
             db.session.commit()
         return redirect(url_for('admin_dashboard'))
+
+@app.route("/search_lots", methods=["GET", "POST"])
+def search_lots():
+    if request.method=="GET":
+        return render_template("search_lots.html", pklots=None)
+    if request.method=="POST":
+        category=request.form.get('category')
+        cat_val=request.form.get("category_value")
+        if category=="Lot ID":
+            pklots=ParkingLot.query.filter_by(id=cat_val).all()  
+        if category=="Prime Location":
+            pklots=ParkingLot.query.filter_by(prime_location_name=cat_val).all()
+        if category=="Address":
+            pklots=ParkingLot.query.filter_by(address=cat_val).all()
+        return render_template("search_lots.html", pklots=pklots)
+        
+    
+
+
     
 
 
