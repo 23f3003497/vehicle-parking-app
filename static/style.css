@@ -139,4 +139,10 @@ h1{
 #action-btn a{
     text-decoration: none;
 }
+.occspot{
+    background-color: tomato;
+}
+.avspot{
+    background-color: green;;
+}
  

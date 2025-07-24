@@ -55,7 +55,11 @@
                             </div>
                             <div class="pklot">
                                 {% for i in range(pklot.max_spots) %}
-                                    <div class="pkspot">{{ i + 1 }}</div>
+                                    {% if i<pklot.occ_spots %}
+                                        <div class="pkspot occspot">{{ i + 1 }}</div>
+                                    {% else %}
+                                        <div class="pkspot avspot">{{ i + 1 }}</div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         </div>

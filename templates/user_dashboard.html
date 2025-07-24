@@ -42,6 +42,7 @@
                     <thead>
                         <tr>
                         <th scope="col">Reservation ID</th>
+                        <th scope="col">Spot ID</th>
                         <th scope="col">Parking Lot Location</th>
                         <th scope="col">Vehicle Number</th>
                         <th scope="col">Booked At</th>
@@ -49,13 +50,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for (res_id,lot_loc,vehicle_no,timestamp,action) in res_list %}
+                        {% for (res_id, spot_id, lot_loc,vehicle_no,timestamp,action) in res_list %}
                         <tr>
                         <th scope="row">{{res_id}}</th>
+                        <td>{{spot_id}}</td>
                         <td>{{lot_loc}}</td>
                         <td>{{vehicle_no}}</td>
-                        <td>{{timestamp}}</td>
-                        <td id="action-btn" class="btn btn-info"><a href="#">{{action}}</a></td>
+                        <td>{{timestamp.strftime("%Y-%m-%d %H:%M")}}</td>
+                        
+                        {% if action=="Release" %}
+                        
+                            <td class="d-flex justify-content-center"><a href="{{ url_for('release_spot', res_id=res_id, spot_id=spot_id) }}" class="btn btn-danger">{{action}}</a></td> 
+                        
+                        {% else %}
+                        
+                            <td  class="d-flex justify-content-center"><a href="" class="btn btn-success">{{action}}</a></td>
+                        
+                        {% endif %}
+                        
                         </tr>
                         {% endfor %}                        
                     </tbody>

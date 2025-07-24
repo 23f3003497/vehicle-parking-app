@@ -14,7 +14,7 @@ def login():
                 #session['username'] = curr_user.username
                 if curr_user.type == "admin":
                     pklots=ParkingLot.query.all()
-                    return render_template("admin_dashboard.html", user=curr_user, pklots=pklots)
+                    return redirect(url_for("admin_dashboard"))
                 else:
                     return redirect(url_for("user_dashboard", user_id=user_id))
             else:
@@ -59,15 +59,16 @@ def user_dashboard(user_id):
     for reservation in reservations:
         res_id=reservation.id
         spot=ParkingSpot.query.filter_by(id=reservation.spot_id).first()
+        spot_id=spot.id
         lot_id=spot.lot_id
         lot_loc=ParkingLot.query.filter_by(id=lot_id).first().prime_location_name
         vehicle_no=reservation.vehicle_number
         timestamp=reservation.parking_timestamp
-        if spot.status=="Booked":
-            action="Release"
+        if reservation.leaving_timestamp:
+            action="Parked Out"
         else:
-            action="Reebook"
-        l.append((res_id,lot_loc,vehicle_no,timestamp,action))
+            action="Release"
+        l.append((res_id,spot_id,lot_loc,vehicle_no,timestamp,action))
 
     return render_template("user_dashboard.html", user=user, res_list=l)
 
@@ -174,7 +175,42 @@ def search_lots():
             pklots=ParkingLot.query.filter_by(address=cat_val).all()
         return render_template("search_lots.html", pklots=pklots)
         
-    
+@app.route("/release_spot/<int:res_id>/<int:spot_id>")
+def release_spot(res_id, spot_id):
+    reservation=Reserve.query.get(res_id)
+    spot=ParkingSpot.query.get(spot_id)
+    lot_id=spot.lot_id
+    lot=ParkingLot.query.get(lot_id)
+    if spot.status=="Booked":
+        reservation.leaving_timestamp=datetime.now()
+        # Calculate duration
+        duration = reservation.leaving_timestamp - reservation.parking_timestamp
+        total_minutes = duration.total_seconds() / 60
+        hours = int(total_minutes // 60)
+        minutes = int(total_minutes % 60)
+
+        # Get price per hour
+        price_per_hour = lot.price
+
+        # Calculate cost
+        if hours == 0:
+            cost = price_per_hour
+        elif minutes < 30:
+            cost = hours * price_per_hour
+        else:
+            cost = (hours + 1) * price_per_hour
+
+        reservation.parking_cost=cost
+        spot.status="Available"
+        lot.occ_spots=lot.occ_spots-1
+        lot.revenue_generated=lot.revenue_generated+cost
+
+        db.session.commit()
+    else:
+        cost=reservation.parking_cost
+
+    return render_template("release_lot.html", reservation=reservation, spot=spot, lot=lot, cost=cost)
+
 
 
     

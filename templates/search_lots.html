@@ -24,7 +24,7 @@
               <a class="nav-link" href="/display_users">Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/search_users">Search</a>
+                <a class="nav-link" href="#">Search</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/user_summary">Summary</a>
@@ -56,7 +56,7 @@
                   <th scope="col">Lot ID</th>
                   <th scope="col">Prime Location</th>
                   <th scope="col">Lot Address</th>
-                  <th scope="col">Available Spots</th>
+                  <th scope="col">Available Spots/Total Spots</th>
                 </tr>
               </thead>
                 <tbody>
@@ -65,7 +65,7 @@
                     <th scope="row">{{lot.id}}</th>
                     <td>{{lot.prime_location_name}}</td>
                     <td>{{lot.address}}</td>
-                    <td>{{lot.max_spots-lot.occ_spots}}</td>
+                    <td>{{lot.max_spots-lot.occ_spots}}/{{lot.max_spots}}</td>
             
                   </tr>
                   {% endfor %}

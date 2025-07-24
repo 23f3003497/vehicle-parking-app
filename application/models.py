@@ -18,6 +18,7 @@ class ParkingLot(db.Model):
     pincode = db.Column(db.Integer, nullable=False)
     max_spots = db.Column(db.Integer, nullable=False)
     occ_spots = db.Column(db.Integer, default=0)
+    revenue_generated = db.Column(db.Integer, default=0)
 
 class ParkingSpot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
