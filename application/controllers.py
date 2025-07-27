@@ -1,7 +1,11 @@
 from flask import Flask, render_template, redirect, request, session, url_for
 from flask import current_app as app #directly importing app-> circular import error, current_app is the app object created in app.py
+from sqlalchemy import null
 from .models import User, ParkingLot, ParkingSpot, Reserve, db
 from datetime import datetime
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -49,6 +53,7 @@ def register():
 def admin_dashboard():
     user = User.query.filter_by(type="admin").first()
     pklots = ParkingLot.query.all()
+    
     return render_template("admin_dashboard.html", user=user, pklots=pklots)
 
 @app.route("/user_dashboard/<int:user_id>")
@@ -85,11 +90,12 @@ def create_parkinglot():
             pph=int(request.form.get("price"))
             pincode=request.form.get("pin")
             max_spots=int(request.form.get("max-spots"))
-            new_pkl = ParkingLot(prime_location_name=location, address=address, price=pph, pincode=pincode, max_spots=max_spots)
+            new_pkl = ParkingLot(prime_location_name=location, address=address, pincode=pincode, max_spots=max_spots)
             db.session.add(new_pkl)
             db.session.commit()
             for i in range(max_spots):
                 new_spot=ParkingSpot(lot_id=new_pkl.id)
+                new_spot.price=pph
                 db.session.add(new_spot)
             db.session.commit()
             #Prevent resubmission by redirecting
@@ -108,7 +114,7 @@ def book_parkingspot(lot_id, user_id):
     if request.method=="GET":
         pklot=ParkingLot.query.get(lot_id)
         first_av_spot=ParkingSpot.query.filter_by(lot_id = lot_id, status="Available").first()
-        return render_template("reserve_lot.html", lot_id=lot_id, user_id=user_id, spot_id=first_av_spot.id, pklot=pklot)
+        return render_template("reserve_lot.html", lot_id=lot_id, user_id=user_id, spot=first_av_spot, pklot=pklot)
     if request.method=="POST":
         action=request.form.get("action")
         if action=="BOOK":
@@ -137,8 +143,11 @@ def display_registered_users():
 def delete_pklot(lot_id):
     pklot=ParkingLot.query.get(lot_id)
     if pklot.occ_spots == 0:
-        pkspots=ParkingSpot.query.filter_by(id=lot_id).all()
+        pkspots=pklot.pkspots
         for spot in pkspots:
+            reservations=Reserve.query.filter_by(spot_id=spot.id).all()
+            for reservation in reservations:
+                db.session.delete(reservation)
             db.session.delete(spot)
         db.session.delete(pklot)
         db.session.commit()
@@ -156,7 +165,13 @@ def edit_pklot(lot_id):
         action=request.form.get("action")
         if action=="UPDATE":
             pklot=ParkingLot.query.get(lot_id)
-            pklot.price = request.form.get("price")
+            new_price=request.form.get("price")
+            #updates the price of all available spots in the lot at once
+            spots=ParkingSpot.query.filter_by(lot_id=lot_id)
+            for spot in spots:
+                #slot price can be changed only if it is available
+                if spot.status=="Available":
+                    spot.price=new_price
             db.session.commit()
         return redirect(url_for('admin_dashboard'))
 
@@ -190,7 +205,7 @@ def release_spot(res_id, spot_id):
         minutes = int(total_minutes % 60)
 
         # Get price per hour
-        price_per_hour = lot.price
+        price_per_hour = spot.price
 
         # Calculate cost
         if hours == 0:
@@ -210,14 +225,67 @@ def release_spot(res_id, spot_id):
         cost=reservation.parking_cost
 
     return render_template("release_lot.html", reservation=reservation, spot=spot, lot=lot, cost=cost)
+@app.route("/spot_controls/<int:spot_id>")
+def spot_control(spot_id):
+    spot=ParkingSpot.query.filter_by(id=spot_id).first()
+    if spot.status == "Booked":
+        reservation = Reserve.query.filter(
+               Reserve.leaving_timestamp.is_(None),
+               Reserve.spot_id == spot.id
+               ).first()
+        user=User.query.filter_by(id=reservation.user_id).first()
+        return render_template("booked_spot_details.html", spot=spot, reservation=reservation, user=user)
+    else:
+        return render_template("av_spot_controls.html", spot=spot)
 
+@app.route("/avspot_actions/<int:spot_id>", methods=["POST"])
+def avspot_actions(spot_id):
+    action=request.form.get('action')
+    if action=="BACK":
+        return redirect(url_for('admin_dashboard'))
+    if action=="UPDATE PRICE":
+        spot=ParkingSpot.query.filter_by(id=spot_id).first()
+        new_price=request.form.get('price')
+        spot.price=new_price
+        db.session.commit()
+        return redirect(url_for('admin_dashboard'))
+    if action=="DELETE SPOT":
+        spot=ParkingSpot.query.filter_by(id=spot_id).first()
+        reservations=Reserve.query.filter_by(spot_id=spot_id).all()
+        if spot:
+            for reservation in reservations:
+                db.session.delete(reservation)
+            db.session.delete(spot)
+            db.session.commit()
+            return redirect(url_for('admin_dashboard'))
+            
+@app.route('/lot_summary')
+def lot_summary():
+    #pie chart on status of parking spots
+    occ=len(ParkingSpot.query.filter_by(status="Booked").all())
+    av=len(ParkingSpot.query.filter_by(status="Available").all())
+    if occ==0 and av==0:
+        return "No data in database to show statistics"
+    labels=["Booked","Available"]
+    sizes=[occ,av]
+    colors=["red", "green"]
+    plt.pie(sizes,labels=labels,colors=colors,autopct="%1.1f%%")
+    plt.title("Status of Parking Spots")
+    plt.savefig("static/pie.png")
+    plt.clf()
 
-
-    
-
-
-
-
-
-
-
+    #bar graph on revnue generated by parking lots
+    pklots=ParkingLot.query.all()
+    labels=[pklot.id for pklot in pklots]
+    sizes=[pklot.revenue_generated for pklot in pklots]
+    bars=plt.bar(labels,sizes)
+    plt.title("Revenue Generated by Parking Lots")
+    plt.xlabel("Parking Lots -->")
+    plt.ylabel("Revenue Generated(in Rs.) -->")
+    # Force integer x-axis labels
+    plt.xticks(labels)
+    # Show values on top of bars
+    plt.bar_label(bars, padding=2)
+    plt.savefig("static/bar.png")
+    plt.clf()
+    return render_template("summary.html")

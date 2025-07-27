@@ -4,24 +4,27 @@
     box-sizing: border-box;
     
 }
-html, body{
+/* html, body{
     height: 100%;
     width: 100%;
-}
+} */
 h1{
     text-align: center;
 }
 #main{
-    border: 2px solid black;
+    /* border: 2px solid black; */
     margin-top: 10px;
 }
 #canvas{
     border: 2px solid black;
+    padding:5px;
     width:60%;
     margin:auto;
-    height:100vh;
+    height:700px;
+    overflow-y: auto;
+    
 }
-.form-body{
+.form-body, .details-body{
     border:2px solid black;
     margin:auto;
     padding:10px;
@@ -40,10 +43,17 @@ h1{
     margin-top: 50px;
     width:350px;
 }
-#new-pkl-form-body, #edit-pkl-form-body{
+#new-pkl-form-body, #edit-pkl-form-body, #res-pks-form-body {
     height:625px;
     width:400px;
     margin-top: 50px;
+    overflow-y: auto;
+}
+#av-spot-form-body{
+    height:500px;
+    width:400px;
+    margin-top: 100px;
+    overflow-y: auto;
 }
 
 #edit-pks-form-body{

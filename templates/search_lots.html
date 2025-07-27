@@ -65,7 +65,7 @@
                     <th scope="row">{{lot.id}}</th>
                     <td>{{lot.prime_location_name}}</td>
                     <td>{{lot.address}}</td>
-                    <td>{{lot.max_spots-lot.occ_spots}}/{{lot.max_spots}}</td>
+                    <td>{{lot.pkspots|length - lot.occ_spots}}/{{lot.pkspots|length}}</td>
             
                   </tr>
                   {% endfor %}

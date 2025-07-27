@@ -16,7 +16,9 @@
                    
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/user_dashboard/{{user.id}}">Home</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/login">Log Out</a>
                             </li>
@@ -39,17 +41,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for lot in pklots %}
-                        <tr>
-                            <th scope="row">{{lot.id}}</th>
-                            <td>{{lot.address}}</td>
-                            <td>{{lot.max_spots-lot.occ_spots}}</td>
-                            
-                            <td class="d-flex justify-content-center">
-                                <a href="{{ url_for('book_parkingspot', lot_id=lot.id, user_id=user.id) }}" class="btn btn-info">BOOK</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                        {% if pklots==[] %}
+                            <td>No results found</td>
+                        {% else %}
+
+                            {% for lot in pklots %}
+                            <tr>
+                                <th scope="row">{{lot.id}}</th>
+                                <td>{{lot.address}}</td>
+                                <td>{{ lot.pkspots|length - lot.occ_spots }}</td>
+                                
+                                <td class="d-flex justify-content-center">
+                                    <a href="{{ url_for('book_parkingspot', lot_id=lot.id, user_id=user.id) }}" class="btn btn-info">BOOK</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
                 

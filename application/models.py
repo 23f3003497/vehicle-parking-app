@@ -13,16 +13,17 @@ class User(db.Model):
 class ParkingLot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     prime_location_name = db.Column(db.String(), nullable=False)
-    price = db.Column(db.Integer, nullable=False)
     address = db.Column(db.String(), nullable=False)
     pincode = db.Column(db.Integer, nullable=False)
     max_spots = db.Column(db.Integer, nullable=False)
     occ_spots = db.Column(db.Integer, default=0)
     revenue_generated = db.Column(db.Integer, default=0)
+    pkspots=db.relationship('ParkingSpot', backref='lot')
 
 class ParkingSpot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     lot_id = db.Column(db.Integer, db.ForeignKey(ParkingLot.id), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(), default="Available", nullable=False)
 
 class Reserve(db.Model):

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Spot Controls</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="main">
+        <div id="canvas">
+            <div class="form-body" id="av-spot-form-body">
+               <h1 id="new-pkl-header">Available Parking Spot Controls</h1>
+               <form action="/avspot_actions/{{spot.id}}" method="post">
+                    <div class="mb-3">
+                        <label for="lotid" class="form-label">Spot ID</label>
+                        <input type="number" class="form-control" id="lotid" name="lotid" value="{{ spot.id }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Lot Address</label>
+                        <textarea class="form-control" id="address" rows="3" readonly>{{ spot.lot.address }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price/hour(in Rs.)</label>
+                        <input type="number" step="0.50" min=0.0 class="form-control" id="price" name="price" value="{{ spot.price }}">
+                    </div>
+                    
+                    <br>
+                    <div class="btn-group pkl-form-btns" role="group">
+                        
+                        <input type="submit" class="btn btn-success" name="action" value="UPDATE PRICE">
+                        <input type="submit" class="btn btn-danger" name="action" value="DELETE SPOT">
+                        <input type="submit" class="btn btn-secondary" name="action" value="BACK">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

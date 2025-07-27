@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div id="main">
@@ -26,7 +26,7 @@
                                 <a class="nav-link" href="/search_lots">Search</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/user_summary">Summary</a>
+                                <a class="nav-link" href="/lot_summary">Summary</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/login">Log Out</a>
@@ -50,15 +50,16 @@
                                 
                                 <a href="{{ url_for('edit_pklot', lot_id=pklot.id) }}">Edit</a>
                                 <a href="{{ url_for('delete_pklot',lot_id=pklot.id) }}">Delete</a>
-                                <p>Occupied: {{pklot.occ_spots}}/{{pklot.max_spots}}</p> 
+                                <p>Occupied: {{pklot.occ_spots}}/{{pklot.pkspots|length}}</p> 
                                 <!-- <p>Occupied: {{pklot.occ_spots}}/{{pklot.max_spots}}</p>                                            -->
                             </div>
                             <div class="pklot">
-                                {% for i in range(pklot.max_spots) %}
-                                    {% if i<pklot.occ_spots %}
-                                        <div class="pkspot occspot">{{ i + 1 }}</div>
+                            
+                                {% for spot in pklot.pkspots %}
+                                    {% if spot.status == "Booked" %}
+                                        <div class="pkspot occspot"><a href="/spot_controls/{{spot.id}}" style="color: black;text-decoration: none;">{{ spot.id }}</a></div>
                                     {% else %}
-                                        <div class="pkspot avspot">{{ i + 1 }}</div>
+                                        <div class="pkspot avspot"><a href="/spot_controls/{{spot.id}}" style="color: black;text-decoration: none;">{{ spot.id }}</a></div>
                                     {% endif %}
                                 {% endfor %}
                             </div>
