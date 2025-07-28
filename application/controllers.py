@@ -10,21 +10,20 @@ matplotlib.use('Agg')
 def login():
     if request.method == "POST":
         username=request.form.get("username")
-        user_id=User.query.filter_by(username=username).first().id
         pwd=request.form["pass"]
         curr_user = User.query.filter_by(username=username).first()
         if curr_user:
             if curr_user.password == pwd:
+                user_id=User.query.filter_by(username=username).first().id
                 #session['username'] = curr_user.username
                 if curr_user.type == "admin":
-                    pklots=ParkingLot.query.all()
                     return redirect(url_for("admin_dashboard"))
                 else:
                     return redirect(url_for("user_dashboard", user_id=user_id))
             else:
-                return "Incorrect Password"
+                return render_template("incorr_pwd.html")
         else:
-            return "User DNE"
+            return render_template("user_dne.html")
         
     return render_template("login.html")
 
@@ -37,12 +36,12 @@ def register():
         address=request.form["address"]
         pincode=request.form['pincode']
         if User.query.filter_by(username=username).first():
-            return "Username already exists, try registering with different username"
+            return render_template("username_exists.html")
         else:
             new_user=User(username=username, email=email, password=password, address=address, pincode=pincode)
             db.session.add(new_user)
             db.session.commit()
-            return "Registered Successfully!"
+            return render_template('reg_success.html')
     return render_template("register.html")
 
 # @app.route("/user-search", methods=["GET"])
@@ -152,7 +151,7 @@ def delete_pklot(lot_id):
         db.session.delete(pklot)
         db.session.commit()
     else:
-        return "can't delete lot with occupied spots"
+        return render_template("spot_occ.html")
     return redirect(url_for('admin_dashboard'))
 
 #only the price per hour of a parking space can be edited
@@ -265,7 +264,7 @@ def lot_summary():
     occ=len(ParkingSpot.query.filter_by(status="Booked").all())
     av=len(ParkingSpot.query.filter_by(status="Available").all())
     if occ==0 and av==0:
-        return "No data in database to show statistics"
+        return render_template("no_data.html")
     labels=["Booked","Available"]
     sizes=[occ,av]
     colors=["red", "green"]
