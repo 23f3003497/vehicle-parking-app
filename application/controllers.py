@@ -79,7 +79,7 @@ def user_dashboard(user_id):
 
 @app.route("/create-pklot", methods=["POST", "GET"])
 def create_parkinglot():
-    user = User.query.filter_by(type="admin").first()
+    #user = User.query.filter_by(type="admin").first()
     if request.method == "POST":
         action=request.form.get("action")
         if action=="ADD":
